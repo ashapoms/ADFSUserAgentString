@@ -30,10 +30,8 @@ After several experiments we found some tricky string that helped to resolve the
 ```
 Mozilla/5.0 (Windows NT
 ```
-Yes, the second parenthesis is missed by intent – we need substring function used by ADFS to match any Windows version on NT kernel (Windows 2000 and later). For instance, for previous example with Chrome on Windows user agent string matching is marked in green:
-```
-**Mozilla/5.0 (Windows NT** 10.0; Win64; x64)
-```
+Yes, the second parenthesis is missed by intent – we need substring function used by ADFS to match any Windows version on NT kernel (Windows 2000 and later).
+
 With this workaround we managed to fully fix the situation by running the PowerShell script that published in this repo. The final **WIASupportedUserAgentStrings** in our case looks like this:
 
 ![Agent String After](https://github.com/ashapoms/ADFSUserAgentString/blob/master/img/AgentStringAfter.PNG)
