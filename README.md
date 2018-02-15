@@ -17,18 +17,23 @@ On the screenshot below you can see initial configuration of **WIASupportedUserA
 
 ![Agent String Before](https://github.com/ashapoms/ADFSUserAgentString/blob/master/img/AgentStringBefore.PNG)
 
-Pay attention to the last string: Mozilla/5.0. Because of that any browsers that have Mozilla/5.0 as a substring in their user agent string has been forced to use WIA. For example, here are two user agent strings of Google Chrome browsers running on Windows and on Android respectively:
+Pay attention to the last string: *Mozilla/5.0*. Because of that any browsers that have *Mozilla/5.0* as a substring in their user agent string has been forced to use WIA. For example, here are two user agent strings of Google Chrome browsers running on Windows and on Android respectively:
+```
 Mozilla/5.0 (Windows NT 10.0; Win64; x64)
 Mozilla/5.0 (Linux; Android 7.1.1; XT1064 Build/MPBS24.65-34-4)      
-
+```
 Both have substring mentioned above, and both are enforced to use WIA. Chrome browser on Android smartphones doesn’t support WIA, ADFS prevents it from using forms-based authentication so it fails.
-The first idea is to remove Mozilla/5.0 from WIASupportedUserAgentStrings completely. Well, it could be solution. But as a result, we’ll actually disable WIA for all versions of Google Chrome browsers including running on Windows. In my company it is not right approach. 
+
+The first idea is to remove *Mozilla/5.0* from **WIASupportedUserAgentStrings** completely. Well, it could be solution. But as a result, we’ll actually disable WIA for all versions of Google Chrome browsers including running on Windows. In my company it is not right approach.
+
 After several experiments we found some tricky string that helped to resolve the issue. And here is it:
-Mozilla/5.0 (Windows NT   
-
+```
+Mozilla/5.0 (Windows NT
+```
 Yes, the second parenthesis is missed by intent – we need substring function used by ADFS to match any Windows version on NT kernel (Windows 2000 and later). For instance, for previous example with Chrome on Windows user agent string matching is marked in green:
+```
 Mozilla/5.0 (Windows NT 10.0; Win64; x64)
-
-With this workaround we managed to fully fix the situation by running the PowerShell script that published in this repo. The final WIASupportedUserAgentStrings in our case looks like this:
+```
+With this workaround we managed to fully fix the situation by running the PowerShell script that published in this repo. The final **WIASupportedUserAgentStrings** in our case looks like this:
 
 ![Agent String After](https://github.com/ashapoms/ADFSUserAgentString/blob/master/img/AgentStringAfter.PNG)
